@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="author" content="LCH">  
+	<title>Test API</title>   <!--I'm comment--> 
+	<!-- <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script> -->
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="https://goessner.net/download/prj/jsonxml/json2xml.js"></script>
+	<script type="text/javascript" src="https://goessner.net/download/prj/jsonxml/xml2json.js"></script>
+	<style type="text/css">
+</style>	
+</head>
+<body>
+	<input type="file" id="file-input" />
+	<h3>Contents of the file:</h3>
+	<pre id="file-content"></pre>
+<div><button id='btn1'>post memo</button></div>
+<!-- <input type="file" id="flup" onchange="getfolder(e)" webkitdirectory mozdirectory msdirectory odirectory directory multiple /> -->
+<script>
+$(document).ready(function() {
+
+
+//////////////////////////////////////
+	function readSingleFile(e) {
+		console.log($("#file-input"));
+		var file = e.target.files[0];
+		if (!file) {
+			return;
+		}
+		var reader = new FileReader();
+		reader.onload = function(e) {
+		var contents = e.target.result;
+		var parser = new DOMParser();
+		var xml = parser.parseFromString(contents, "text/xml");
+		var jsonStr = xml2json(xml,"");
+		var json = JSON.parse(jsonStr);
+		var resultTitle = '';
+		var resultContent = '';
+
+		console.log(json);
+
+		displayContents(json);
+
+  };
+	  reader.readAsText(file);
+	}
+
+	function displayContents(contents) {
+  	var element = document.getElementById('file-content');
+  	element.textContent = contents;
+	}
+
+	document.getElementById('file-input').addEventListener('change', readSingleFile, false);
+
+	function parseString(){
+    parser = new DOMParser();
+    xmlDoc = parser.parseFromString("data/MedmontStudio.xml", "text/xml");
+		console.log(xmlDoc);
+	};
+
+	
+	function getfolder(e) {
+	  var files = e.target.files;
+	  var path = files[0].webkitRelativePath;
+	  var Folder = path.split("/");
+	  alert(Folder[0]);
+	  console.log($("#flup").val());
+	};
+
+	function postQicAudioMemo1(){
+		var email={
+			"file_name": "檔案名稱",
+			"call_time": 1551683838,
+			"location": [
+				"Taipei",
+				"Shanghai"
+			],
+			"companyname": [
+				"emotibot"
+			],
+			"User_Income": [
+				100000000
+			],
+			"exampleDesc": "完整傳入格式請看schema以及說明"
+		};
+		$.ajax({
+			url: "http://192.168.3.233:80/qic/v1/qi/calls",
+			type: "POST",
+			data: email,
+			contentType: "application/json",
+			headers: {
+				"Content-Type": "application/json",
+				"X-EnterpriseID": "bb3e3925f0ad11e7bd860242ac120003",
+				"X-UserID": "4b21158a395311e88a710242ac110003",
+			},
+			success: function (data) {
+				callback(data);
+			}
+		});
+	};
+	function postQicAudioMemo2(){
+		var settings = {
+		"async": true,
+		"crossDomain": true,
+		"url": "http://192.168.3.233:80/qic/v1/qi/calls",
+		"method": "POST",
+		"headers": {
+			"Content-Type": "application/json",
+			"X-EnterpriseID": "bb3e3925f0ad11e7bd860242ac120003",
+			"X-UserID": "4b21158a395311e88a710242ac110003",
+			// "Access-Control-Allow-Origin": "http://base.com",
+			// "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+			// "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
+		},
+		"processData": false,
+		"data": "{\n  \"file_name\": \"檔案名稱\",\n  \"call_time\": 1551683838,\n  \"location\": [\n    \"Taipei\",\n    \"Shanghai\"\n  ],\n  \"companyname\": [\n    \"emotibot\"\n  ],\n  \"User_Income\": [\n    100000000\n  ],\n  \"exampleDesc\": \"完整傳入格式請看schema以及說明\"\n}"
+		}
+
+		$.ajax(settings).done(function (response) {
+		console.log(response);
+		});
+	}
+	///////////
+});
+</script>
+</body>
+</html>

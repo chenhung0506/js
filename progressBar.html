@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="author" content="LCH">  
+	<title>Test API</title>   <!--I'm comment--> 
+	<!-- <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script> -->
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="https://goessner.net/download/prj/jsonxml/json2xml.js"></script>
+	<script type="text/javascript" src="https://goessner.net/download/prj/jsonxml/xml2json.js"></script>
+	<style type="text/css">
+</style>	
+</head>
+<body>
+<!-- Change the below data attribute to play -->
+<div class="progress-wrap progress" data-progress-percent="25">
+  <div class="progress-bar progress"></div>
+</div>
+<script>
+$(document).ready(function() {
+	// on page load...
+	moveProgressBar();
+	// on browser resize...
+	$(window).resize(function() {
+			moveProgressBar();
+	});
+
+	// SIGNATURE PROGRESS
+	function moveProgressBar() {
+		console.log("moveProgressBar");
+		var getPercent = ($('.progress-wrap').data('progress-percent') / 100);
+		var getProgressWrapWidth = $('.progress-wrap').width();
+		var progressTotal = getPercent * getProgressWrapWidth;
+		var animationLength = 2500;
+		console.log($('.progress-bar').stop());
+		// on page load, animate percentage bar to data percentage length
+		// .stop() used to prevent animation queueing
+		$('.progress-bar').stop().animate({
+				left: progressTotal
+		}, animationLength);
+	}
+});
+</script>
+<style lang="scss" scoped>
+@import "compass/css3";
+
+.progress {
+  width: 100%;
+  height: 50px;
+}
+.progress-wrap {
+  background: #f80;
+  margin: 20px 0;
+  overflow: hidden;
+  position: relative;
+}
+.progress-bar {
+    background: #ddd;
+    left: 0;
+    position: absolute;
+    top: 0;
+  }
+</style>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="author" content="LCH">  
+	<title>Test API</title>   <!--I'm comment--> 
+	<!-- <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script> -->
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>	
+	<style type="text/css">
+</style>	
+</head>
+<body>
+		<input type="file" id="my_file_input" />
+		<div id='my_file_output'></div>
+<script>
+$(document).ready(function() {
+	$("#my_file_input").change(function() {
+		console.log($("#my_file_input")[0].files[0]);
+		parseExel($("#my_file_input")[0].files[0]);
+	});
+
+	function parseExel(file) {
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			var data = e.target.result;
+			var workbook = XLSX.read(data, {
+				type: 'binary'
+			});
+			workbook.SheetNames.forEach(function(sheetName) {
+				// Here is your object
+				var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+				var json_object = JSON.stringify(XL_row_object);
+				console.log(XL_row_object);
+				console.log(json_object);
+			})
+		};
+		reader.onerror = function(ex) {
+			console.log(ex);
+		};
+		reader.readAsBinaryString(file);
+	};
+});
+</script>
+<style lang="scss" scoped>
+@import "compass/css3";
+</style>
+</body>
+</html>

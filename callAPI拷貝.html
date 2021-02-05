@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="author" content="LCH">  
+	<title>Test API</title>   <!--I'm comment--> 
+	<!-- <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script> -->
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
+	<style type="text/css">
+</style>	
+</head>
+
+<body>
+		<div class="fb-customerchat"
+		page_id="ENTER-YOUR-FACEBOOK-ID-HERE"
+		minimized="true">
+	 </div>
+	 <script>
+		 window.fbAsyncInit = function() {
+			 FB.init({
+				 appId            : 'facebook-developer-app-id',
+				 autoLogAppEvents : true,
+				 xfbml            : true,
+				 version          : 'v2.11'
+			 });
+		 };
+	 (function(d, s, id){
+				var js, fjs = d.getElementsByTagName(s)[0];
+				if (d.getElementById(id)) {return;}
+				js = d.createElement(s); js.id = id;
+				js.src = "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
+				fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));
+	 </script>
+	 
+	 <!-- Your customer chat code -->
+	 <div class="fb-customerchat"
+		 attribution=setup_tool
+		 page_id="366358454044839"
+		 theme_color="#BE59B9">
+	 </div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="author" content="LCH">  
+	<title>Test API</title>   <!--I'm comment--> 
+	<!-- <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script> -->
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="https://goessner.net/download/prj/jsonxml/json2xml.js"></script>
+	<script type="text/javascript" src="https://goessner.net/download/prj/jsonxml/xml2json.js"></script>
+	<style type="text/css">
+</style>	
+</head>
+<body>
+	<input type="file" id="file-input" />
+	<h3>Contents of the file:</h3>
+	<pre id="file-content"></pre>
+<div><button id='btn1'>post memo</button></div>
+<!-- <input type="file" id="flup" onchange="getfolder(e)" webkitdirectory mozdirectory msdirectory odirectory directory multiple /> -->
+<script>
+$(document).ready(function() {
+	const rows = [
+		["File Name","成交[0:否; 1:是]","发话时间[格式: YYYY/MM/DD HH:MM:SS]","座席ID","座席姓名","座席分机","所属部门","客户ID","客户姓名","客户电话"," API_KEY","随录字段值","API_KEY","随录字段值","API_KEY","随录字段值"],
+		["700.wav","0","2019/11/12 16:24:30","上海","小明","321","商務部門","H124015","這是客戶姓名","0919040567","customer_serial","12345","insurance_number","No2232","deal_date","2019/11/12 16:24:30"],
+		["701.wav","0","2019/11/11 16:24:22","台北","小美","333","商務部門","H124015","這是客戶姓名","0919040567","deal_date","2019/11/12 16:24:30","hello","hello","",""],
+		["702.wav","1","2019/11/11 16:20:05","北京","小吳","345","商務部門","H124015","這是客戶姓名","0919040567","","","","","",""]
+	];
+
+	let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
+	function createCsv() {
+		var encodedUri = encodeURI(csvContent);
+		var link = document.createElement("a");
+		link.setAttribute("href", encodedUri);
+		link.setAttribute("download", "bulk upload template.csv");
+		document.body.appendChild(link);
+		link.click()
+	}
+
+	$( "#btn1" ).click(function() {
+		createCsv();
+	});
+
+});
+</script>
+</body>
+</html>

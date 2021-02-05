@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+		<script src="http://oss.sheetjs.com/js-xlsx/xlsx.full.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>	
+</head>
+
+<body>
+    <button onclick="downloadExl(jsono)">匯出</button>
+    <!--
+            以下a標籤不需要內容
+        -->
+    <a href="" download="這裡是下載的檔名.xlsx" id="hf"></a>
+    <script>
+        const jsono = [{ Vehicle: 'BMW', Date: '30, Jul 2013 09:24 AM', Location: 'Hauz Khas, Enclave, New Delhi, Delhi, India', Speed: 42 }, { Vehicle: 'Honda CBR', Date: '30, Jul 2013 12:00 AM', Location: 'Military Road,  West Bengal 734013,  India', Speed: 0 }];
+        var tmpDown; //匯出的二進位制物件
+        function downloadExl(json, type) {
+            var tmpdata = json[0];
+            console.log(json);
+            json.unshift({});
+            console.log(json);
+            var keyMap = Object.keys(tmpdata);
+            for (var i = 0; i< keyMap.length ; i+= 1) {
+                json[0][keyMap[i]] = keyMap[i];
+            }
+            var tmpdata = [];//用來儲存轉換好的json 
+            json.map((v, i) => keyMap.map((k, j) => Object.assign({}, {
+                v: v[k],
+                position: (j > 25 ? getCharCol(j) : String.fromCharCode(65 + j)) + (i + 1)
+            }))).reduce((prev, next) => prev.concat(next)).forEach((v) => {
+                console.log(v);
+                tmpdata[v.position] = {
+                  v: v.v,
+                };
+            });
+            console.log(tmpdata);
+            var outputPos = Object.keys(tmpdata); //設定區域,比如表格從A1到D10
+            var tmpWB = {
+                SheetNames: ['mySheet'], //儲存的表標題
+                Sheets: {
+                    'mySheet': Object.assign({}, tmpdata, {'!ref': outputPos[0] + ':' + outputPos[outputPos.length - 1] })
+                }
+                };
+            const tmpDown = new Blob([this.s2ab(XLSX.write(tmpWB, { bookType: 'xlsx', bookSST: false, type: 'binary' }))], { type: '' });
+            var href = URL.createObjectURL(tmpDown); //建立物件超連結
+            document.getElementById("hf").href = href; //繫結a標籤
+            document.getElementById("hf").click(); //模擬點選實現下載
+            setTimeout(function() { //延時釋放
+                URL.revokeObjectURL(tmpDown); //用URL.revokeObjectURL()來釋放這個object URL
+            }, 100);
+        }
+
+        function s2ab(s) { //字串轉字元流
+            var buf = new ArrayBuffer(s.length);
+            var view = new Uint8Array(buf);
+            for (let i = 0; i < s.length; i += 1) {
+                view[i] = s.charCodeAt(i) & 0xFF;
+            }
+            // for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        }
+         // 將指定的自然數轉換為26進製表示。對映關係：[0-25] -> [A-Z]。
+        function getCharCol(n) {
+            let temCol = '',
+            s = '',
+            m = 0
+            while (n > 0) {
+                m = n % 26 + 1
+                s = String.fromCharCode(m + 64) + s
+                n = (n - m) / 26
+            }
+            return s
+        }
+    </script>
+</body>
+
+</html>
